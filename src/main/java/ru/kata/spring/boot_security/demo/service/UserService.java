@@ -79,7 +79,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-
+    @Transactional
     public void updateUser(Integer id, User user) {
         User userid = entityManager.find(User.class, user.getId());
         if (userid == null) {

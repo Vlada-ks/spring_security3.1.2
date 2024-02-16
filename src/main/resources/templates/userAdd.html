@@ -34,25 +34,26 @@
     <input type="text" th:field="*{password}" id="password" name="password"/>
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
     <br>
-    <label for="roles">Role</label>
-    <input type="text" th:field="*{roles}" id="roles" name="roles"/>
-    <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Error</div>
     <br>
-    <input type="submit" value="Ok">
+    <label>Select role:</label>
+    <div>
+        <label><input type="checkbox" name="roles" value="2"> Admin</label>
+        <label><input type="checkbox" name="roles" value="1"> User</label>
+    </div>
+    <br/>
+
+    <input type="submit" value="Ok"/>
+
+
+    <input type="button" value="Back"
+           onclick="window.location.href = '/admin'"/>
+    <br>
+
 </form>
 <br>
-<form th:action="@{/admin}" th:object="${newUser}" method="post">
-    <p>
-        <label>Roles:
-            <input type="checkbox" name="roles"
-                   th:each="role : ${listRoles}"
-                   th:text="${role.name}"
-                   th:value="${role.id}"
-                   th:field="*{roles}"
-            />
-        </label>
-    </p>
-</form>
+
+
+
 
 </body>
 </html>

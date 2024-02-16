@@ -39,7 +39,7 @@ public class AdminController {
     @GetMapping("/new")
     public String addNewUser(Model model) {
         model.addAttribute("newUser", new User());
-        model.addAttribute("roles", roleService.getListRoles());
+//        model.addAttribute("roles", roleService.getAllRoles());
         return "userAdd";
     }
 
@@ -49,19 +49,19 @@ public class AdminController {
             return "userAdd";
 
         userService.saveUser(user);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
     @PostMapping("/update")
     public String updateUser(@RequestParam("id") Integer id, Model model) {
         model.addAttribute("newUser", userService.getUserById(id));
-        model.addAttribute("listRoles", roleService.getListRoles());
+//        model.addAttribute("listRoles", roleService.getAllRoles());
         return "userAdd";
     }
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("id") Integer id) {
         userService.deleteUser(id);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 } 

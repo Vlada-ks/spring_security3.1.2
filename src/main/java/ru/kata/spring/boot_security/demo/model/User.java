@@ -21,6 +21,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -61,7 +62,7 @@ public class User implements UserDetails {
     private String username;
 
     @NotEmpty(message = "Password should not be empty")
-    @Size(min = 5, max = 30, message = "Password should be between 2 and 30 characters")
+    @Size(min = 5, max = 100, message = "Password should be between 2 and 100 characters")
     @Column(name = "password")
     private String password;
 
