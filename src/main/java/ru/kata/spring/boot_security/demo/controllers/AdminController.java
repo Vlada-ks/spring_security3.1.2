@@ -1,7 +1,5 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
@@ -22,12 +19,10 @@ import javax.validation.Valid;
 public class AdminController {
 
     private final UserService userService;
-    private final RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @GetMapping
@@ -39,7 +34,6 @@ public class AdminController {
     @GetMapping("/new")
     public String addNewUser(Model model) {
         model.addAttribute("newUser", new User());
-//        model.addAttribute("roles", roleService.getAllRoles());
         return "userAdd";
     }
 
@@ -47,7 +41,6 @@ public class AdminController {
     public String saveUser(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "userAdd";
-
         userService.saveUser(user);
         return "redirect:/admin";
     }
@@ -55,7 +48,6 @@ public class AdminController {
     @PostMapping("/update")
     public String updateUser(@RequestParam("id") Integer id, Model model) {
         model.addAttribute("newUser", userService.getUserById(id));
-//        model.addAttribute("listRoles", roleService.getAllRoles());
         return "userAdd";
     }
 
