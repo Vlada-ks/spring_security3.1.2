@@ -16,6 +16,7 @@
         <th scope="col">Salary</th>
         <th scope="col">Username</th>
         <th scope="col">Password</th>
+        <th scope="col">Role</th>
     </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
         <td th:text="${user.getSurname()}"/>
         <td th:text="${user.getPosition()}"/>
         <td th:text="${user.getSalary()}"/>
+        <td th:text="${user.getUsername()}"/>
         <td th:text="${user.getPassword()}"/>
         <td th:text="${user.getRoles()}"/>
 
