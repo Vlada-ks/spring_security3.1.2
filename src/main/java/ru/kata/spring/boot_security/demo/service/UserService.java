@@ -1,17 +1,15 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 
@@ -19,13 +17,12 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public UserService(@Lazy UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
 
     }
 
@@ -48,41 +45,41 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
-        return entityManager.createQuery("SELECT user FROM User user", User.class).getResultList();
+        return userRepository.findAll();
     }
 
 
     public void saveUser(User user) {
-        entityManager.merge(user);
-        entityManager.flush();
+        userRepository.save(user);
     }
 
 
     @Transactional(readOnly = true)
     public User getUserById(Integer id) {
-        User user = entityManager.find(User.class, id);
-        if (user == null) {
-            throw new EntityNotFoundException("User with this id not found");
-        }
-        return user;
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Not found"));
     }
 
     @Transactional
     public void updateUser(Integer id, User user) {
-        User userid = entityManager.find(User.class, user.getId());
+        User userid = getUserById(id);
         if (userid == null) {
             throw new EntityNotFoundException("User with this id not found");
         }
-        entityManager.merge(user);
-        entityManager.flush();
+        userRepository.save(user);
     }
 
     public void deleteUser(Integer id) {
-        User user = this.getUserById(id);
-        if (user == null) {
+        User user1 = this.getUserById(id);
+        if (user1 == null) {
             throw new EntityNotFoundException("User with this id not found");
         }
-        entityManager.remove(user);
+        userRepository.deleteById(id);
     }
+
+
 }
+
+
+
+
 
