@@ -3,10 +3,10 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,12 +17,13 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+
 
     }
 
@@ -50,6 +51,8 @@ public class UserService implements UserDetailsService {
 
 
     public void saveUser(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
@@ -59,14 +62,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Not found"));
     }
 
-    @Transactional
-    public void updateUser(Integer id, User user) {
-        User userid = getUserById(id);
-        if (userid == null) {
-            throw new EntityNotFoundException("User with this id not found");
-        }
-        userRepository.save(user);
-    }
 
     public void deleteUser(Integer id) {
         User user1 = this.getUserById(id);
