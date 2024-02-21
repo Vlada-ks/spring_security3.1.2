@@ -7,10 +7,10 @@ import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
 @Service
 public class RoleService {
-    private final RoleRepository roleDao;
+    private final RoleRepository roleRepository;
 
-    public RoleService(RoleRepository roleDao) {
-        this.roleDao = roleDao;
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
     }
 
 
